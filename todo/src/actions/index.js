@@ -12,7 +12,7 @@ export const COMPLETED_TODO = "COMPLETED_TODO";
 export const completedTodo = todo => {
   return {
     type: COMPLETED_TODO,
-    payload: { ...todo, completed: !todo.completed }
+    payload: todo.id
   };
 };
 

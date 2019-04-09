@@ -16,8 +16,6 @@ const initialState = {
 };
 
 const reducer = (state = initialState, action) => {
-  console.log(action.payload);
-  console.log(action);
   switch (action.type) {
     case ADD_TODO_ITEM:
       return {
@@ -31,28 +29,25 @@ const reducer = (state = initialState, action) => {
         ]
       };
     case COMPLETED_TODO:
-      const newState = arr => {
-        let newArr = arr.slice();
-        let ind = 0;
-        for (let i = 0; i < newArr.length; i++) {
-          if (newArr[i] === action.payload.id) {
-            return (ind = i);
-          } else {
-            continue;
-          }
-        }
-        return arr.splice(ind, 0, action.payload);
-      };
-      console.log(newState(state.todoItems));
       return {
-        todoItems: [...state.todoItems, action.payload]
+        ...state,
+        todoItems: state.todoItems.map(todo => {
+          if (todo.id === action.payload) {
+            return {
+              ...todo,
+              completed: !todo.completed
+            };
+          } else {
+            return todo;
+          }
+        })
       };
     case CLEAR_COMPLETED:
-      const filteredState = state.todoItems.filter(todo => {
-        return todo.completed === true;
-      });
       return {
-        todoItems: [...filteredState]
+        ...state,
+        todoItems: state.todoItems.filter(todo => {
+          return todo.completed === false;
+        })
       };
     default:
       return state;
